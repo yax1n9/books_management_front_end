@@ -36,7 +36,7 @@ const loginForm = ref(null)
 // 表单校验规则
 const loginFormRules = reactive({
   account: [
-    {required: true, message: '请输入合法的账号', trigger: 'blur'},
+    {required: true, message: '请输入正确的账号', trigger: 'blur'},
     {min: 3, max: 16, message: '账号长度为3-16位', trigger: 'blur'},
   ],
   password: [

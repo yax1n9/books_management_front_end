@@ -5,7 +5,12 @@
               style="width: 280px; margin-right: 20px;"/>
     <el-select v-model="filterData.type" placeholder="类型筛选" clearable @change="initTableData"
                style="width: 280px; margin-right: 20px;">
-      <el-option v-for="item in types" :key="item.id" :label="item.name" :value="item.typeId"/>
+      <el-option v-for="item in typeStore.typeList" :key="item.typeId" :label="item.name" :value="item.typeId"/>
+    </el-select>
+    <el-select v-model="filterData.status" placeholder="状态筛选" clearable @change="initTableData"
+               style="width: 280px; margin-right: 20px;">
+      <el-option :value="0" label="未借出"/>
+      <el-option :value="1" label="已借出"/>
     </el-select>
     <el-button type="primary" @click="addBook">新增图书</el-button>
   </header>
@@ -19,13 +24,27 @@
       <el-table-column width="100px" label="单价（元）" prop="price"/>
       <el-table-column width="80px" label="版次" prop="edition"/>
       <el-table-column width="180px" label="出版时间" prop="publishTime"/>
-      <el-table-column width="120px" label="类型" prop="type"/>
+      <el-table-column width="120px" label="类型">
+        <template v-slot="{row}">
+          {{
+            typeStore.typeList.filter(item => item.typeId === row.type)[0] ? typeStore.typeList.filter(item => item.typeId === row.type)[0].name : ''
+          }}
+        </template>
+      </el-table-column>
+      <el-table-column width="85px" label="状态">
+        <template v-slot="{row}">
+          <el-tag :type="row.status? 'danger':'success'">
+            {{ row.status ? '已借出' : '未借出' }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column width="130px" label="操作">
         <template v-slot="{row}">
           <el-link type="primary" style="margin-right: 8px;" v-permission="['admin']" @click="editBook(row)">修改
           </el-link>
-          <el-link type="danger" style="margin-right: 8px;" v-permission="['admin']">删除</el-link>
-          <el-link type="success">借阅</el-link>
+          <el-link type="danger" style="margin-right: 8px;" v-permission="['admin']" @click="deleteBook(row)">删除
+          </el-link>
+          <el-link type="success" @click="subscribeBook(row)">借阅</el-link>
         </template>
       </el-table-column>
     </el-table>
@@ -45,17 +64,19 @@
   </footer>
 
   <!-- 弹出层 -->
-  <add v-if="dialogType"/>
-  <edit :data="curBook" v-if="!dialogType"/>
+  <add v-if="dialogType" @init-table-data="initTableData"/>
+  <edit v-else :data="curBook" @init-table-data="initTableData"/>
+  <subscribe :data="curBook" @init-table-data="initTableData"/>
 </template>
 
 <script setup>
-import {getBooksPage} from "../../api/index.js";
-import {reactive, onMounted, ref, provide} from "vue";
+import {getBooksPage, removeBook} from "../../api/index.js";
+import {reactive, onMounted, ref} from "vue";
 import useTypeStore from "../../store/typeStore.js";
 import useDialogStore from "../../store/dialogStore.js";
 import Add from "./Dialog/Add.vue";
 import Edit from "./Dialog/Edit.vue";
+import Subscribe from "./Dialog/Subscribe.vue"
 
 onMounted(() => {
   initTableData()
@@ -64,12 +85,12 @@ onMounted(() => {
 // 条件过滤
 const filterData = reactive({
   name: '',
-  type: undefined
+  type: undefined,
+  status: undefined
 })
 
 // 类型 store
 const typeStore = useTypeStore()
-const types = typeStore.typeList
 
 // 表格数据
 let tableData = ref([])
@@ -98,11 +119,56 @@ const addBook = () => {
   dialogType.value = true
 }
 const curBook = ref({})
+
+/**
+ * 点击修改
+ * @param book
+ */
 const editBook = (book) => {
-  console.log(1111, book)
   curBook.value = book
   dialogType.value = false
   dialogStore.bookPageDialogVisible = true
+}
+
+/**
+ * 点击删除
+ * @param book
+ */
+const deleteBook = (book) => {
+  ElMessageBox.confirm(`确定要删除图书《${book.name}》吗？`, 'Warning', {
+    confirmButtonText: '删除',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async () => {
+    const res = await removeBook(book.bookId)
+    if (res.data.code === 200) {
+      ElMessage({
+        type: 'success',
+        message: '删除成功'
+      })
+    } else {
+      ElMessage({
+        type: 'error',
+        message: '删除失败'
+      })
+    }
+  }).catch(() => {
+    ElMessage({
+      type: 'info',
+      message: '取消删除'
+    })
+  }).finally(() => {
+    initTableData()
+  })
+}
+
+/**
+ * 点击借阅
+ * @param book
+ */
+const subscribeBook = (book) => {
+  curBook.value = book
+  dialogStore.subscribeDialogVisible = true
 }
 </script>
 

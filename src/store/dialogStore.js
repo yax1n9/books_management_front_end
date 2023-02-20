@@ -2,7 +2,10 @@ import {defineStore} from "pinia";
 
 const useDialogStore = defineStore('dialogStore', {
   state: () => ({
-    bookPageDialogVisible: false
+    // 增加删除
+    bookPageDialogVisible: false,
+    // 订阅
+    subscribeDialogVisible: false
   }),
   getters: {},
   actions: {}
