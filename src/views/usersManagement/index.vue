@@ -40,7 +40,7 @@
         small
         background
         layout="prev, pager, next"
-        :current-page="pagination.currentPage"
+        :current-page.sync="pagination.currentPage"
         :page-size="pagination.pageSize"
         :total="pagination.total"
         @current-change="initTableData"
@@ -58,7 +58,6 @@
   >
     <el-form
         ref="formRef"
-        :rules="formRules"
         :model="curUser"
         label-width="90px"
         class="demo-ruleForm"
@@ -152,7 +151,7 @@ import {
   getEducationList,
   getMajorList,
   getPositionList,
-  getProfessionalTitleList
+  getProfessionalTitleList, getTypes, modifyUser
 } from "../../api/index.js";
 
 const typeStore = useTypeStore()
@@ -196,11 +195,25 @@ const formRef = ref()
 const formRules = reactive({})
 const curUser = ref({})
 const editClick = (row) => {
-  curUser.value = row
+  curUser.value = JSON.parse(JSON.stringify(row))
   editDialogVisible.value = true
 }
 
-const editSubmit = () => {
+const editSubmit = async () => {
+  const res = await modifyUser(curUser.value)
+  if (res.data.code === 200) {
+    ElMessage({
+      type: 'success',
+      message: '修改成功'
+    })
+  } else {
+    ElMessage({
+      type: 'danger',
+      message: '修改失败'
+    })
+  }
+  editDialogVisible.value = false
+  await initTableData()
 
 }
 
@@ -218,22 +231,27 @@ const initSelectOptions = async () => {
 
   const res2 = await getMajorList()
   if (res2.data.code) {
-    majorOptions.value = res1.data.data
+    majorOptions.value = res2.data.data
   }
 
   const res3 = await getPositionList()
   if (res3.data.code) {
-    positionOptions.value = res1.data.data
+    positionOptions.value = res3.data.data
   }
 
   const res4 = await getDepartmentList()
   if (res4.data.code) {
-    departmentOptions.value = res1.data.data
+    departmentOptions.value = res4.data.data
   }
 
   const res5 = await getEducationList()
   if (res5.data.code) {
-    educationOptions.value = res1.data.data
+    educationOptions.value = res5.data.data
+  }
+
+  const res6 = await getTypes()
+  if (res5.data.code) {
+    typeOptions.value = res6.data.data
   }
 }
 </script>

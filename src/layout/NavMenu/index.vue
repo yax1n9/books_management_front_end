@@ -20,6 +20,13 @@
           <span>用户管理</span>
         </el-menu-item>
 
+        <el-menu-item index="/main/subscribeLog">
+          <el-icon>
+            <location/>
+          </el-icon>
+          <span>借阅记录</span>
+        </el-menu-item>
+
       </el-menu>
     </el-scrollbar>
   </div>

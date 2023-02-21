@@ -44,7 +44,7 @@
           </el-link>
           <el-link type="danger" style="margin-right: 8px;" v-permission="['admin']" @click="deleteBook(row)">删除
           </el-link>
-          <el-link type="success" @click="subscribeBook(row)" :disabled="row.status">借阅</el-link>
+          <el-link type="success" @click="subscribeBook(row)" :disabled="row.status===1">借阅</el-link>
         </template>
       </el-table-column>
     </el-table>
@@ -56,7 +56,7 @@
         small
         background
         layout="prev, pager, next"
-        :current-page="pagination.currentPage"
+        :current-page.sync="pagination.currentPage"
         :page-size="pagination.pageSize"
         :total="pagination.total"
         @current-change="initTableData"

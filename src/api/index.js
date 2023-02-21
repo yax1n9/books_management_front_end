@@ -102,11 +102,31 @@ export const insertBorrowLog = (params) => {
   })
 }
 
+
+/**
+ * 查询用户列表页
+ * @param params
+ * @returns {*}
+ */
 export const getUserPage = (params) => {
   return service({
     url: `/users/${params.currentPage}/${params.pageSize}`,
     method: 'get',
     params: params.user
+  })
+}
+
+
+/**
+ * 修改用户
+ * @param params
+ * @returns {*}
+ */
+export const modifyUser = (params) => {
+  return service({
+    url: `/users`,
+    method: 'put',
+    data: params
   })
 }
 

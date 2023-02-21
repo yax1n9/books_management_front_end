@@ -40,7 +40,7 @@ export default [
         component: () => import('../views/BooksManagement/index.vue'),
         meta: {
           label: '图书管理',
-          permissions: ['admin']
+          permissions: ['user', 'admin']
         }
       },
       // 用户管理
@@ -53,6 +53,16 @@ export default [
           permissions: ['admin']
         }
       },
+      // 借阅记录
+      {
+        path: 'subscribeLog',
+        name: 'subscribeLog',
+        component: () => import('../views/SubscribeLog/index.vue'),
+        meta: {
+          label: '借阅记录',
+          permissions: ['admin']
+        }
+      }
     ]
   }
 ]
