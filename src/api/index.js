@@ -75,3 +75,73 @@ export const removeBook = (bookId) => {
     method: 'delete'
   })
 }
+
+/**
+ * 查询借阅记录
+ * @param params
+ * @returns {*}
+ */
+export const getBorrowLog = (params) => {
+  return service({
+    url: `/borrowLogs/${params.currentPage}/${params.pageSize}`,
+    method: 'get',
+    params: params.borrowLog
+  })
+}
+
+/**
+ * 新增借阅记录
+ * @param params
+ * @returns {*}
+ */
+export const insertBorrowLog = (params) => {
+  return service({
+    url: '/borrowLogs',
+    method: 'post',
+    data: params
+  })
+}
+
+export const getUserPage = (params) => {
+  return service({
+    url: `/users/${params.currentPage}/${params.pageSize}`,
+    method: 'get',
+    params: params.user
+  })
+}
+
+export const getDepartmentList = () => {
+  return service({
+    url: '/departments',
+    methods: 'get'
+  })
+}
+
+export const getEducationList = () => {
+  return service({
+    url: '/educations',
+    method: 'get'
+  })
+}
+
+export const getPositionList = () => {
+  return service({
+    url: '/positions',
+    method: 'get'
+  })
+}
+
+export const getMajorList = () => {
+  return service({
+    url: '/majors',
+    method: 'get'
+  })
+}
+
+export const getProfessionalTitleList = () => {
+  return service({
+    url: '/professionalTitles',
+    method: 'get'
+  })
+}
+

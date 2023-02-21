@@ -12,7 +12,7 @@
       <el-option :value="0" label="未借出"/>
       <el-option :value="1" label="已借出"/>
     </el-select>
-    <el-button type="primary" @click="addBook">新增图书</el-button>
+    <el-button type="primary" @click="addBook" v-permission="['admin']">新增图书</el-button>
   </header>
 
   <!-- 表格 -->
@@ -44,7 +44,7 @@
           </el-link>
           <el-link type="danger" style="margin-right: 8px;" v-permission="['admin']" @click="deleteBook(row)">删除
           </el-link>
-          <el-link type="success" @click="subscribeBook(row)">借阅</el-link>
+          <el-link type="success" @click="subscribeBook(row)" :disabled="row.status">借阅</el-link>
         </template>
       </el-table-column>
     </el-table>
