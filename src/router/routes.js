@@ -62,6 +62,15 @@ export default [
           label: '借阅记录',
           permissions: ['admin']
         }
+      },
+      {
+        path: 'mySubscribeLog',
+        name: 'mySubscribeLog',
+        component: () => import('../views/MySubscribeLog/index.vue'),
+        meta: {
+          label: '我的借阅',
+          permissions: ['user', 'admin']
+        }
       }
     ]
   }

@@ -13,18 +13,25 @@
           <span>图书管理</span>
         </el-menu-item>
 
-        <el-menu-item index="/main/usersManagement">
+        <el-menu-item index="/main/usersManagement" v-permission="['admin']">
           <el-icon>
             <document/>
           </el-icon>
           <span>用户管理</span>
         </el-menu-item>
 
-        <el-menu-item index="/main/subscribeLog">
+        <el-menu-item index="/main/subscribeLog" v-permission="['admin']">
           <el-icon>
             <location/>
           </el-icon>
           <span>借阅记录</span>
+        </el-menu-item>
+
+        <el-menu-item index="/main/mySubscribeLog">
+          <el-icon>
+            <location/>
+          </el-icon>
+          <span>我的借阅</span>
         </el-menu-item>
 
       </el-menu>

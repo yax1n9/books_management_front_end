@@ -102,6 +102,14 @@ export const insertBorrowLog = (params) => {
   })
 }
 
+export const modifyBorrowLog = (params) => {
+  return service({
+    url: '/borrowLogs',
+    method: 'put',
+    data: params
+  })
+}
+
 
 /**
  * 查询用户列表页

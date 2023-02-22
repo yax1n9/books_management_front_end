@@ -58,15 +58,19 @@ const durations = [
  * 提交订阅信息
  */
 const submitSubscribe = async () => {
-  // 提交借阅信息   借阅人id 借阅人姓名 借阅时间 返还时间
+  // 提交借阅信息 图书id  图书name  借阅人id 借阅人姓名 借阅时间 返还时间
   const borrowDate = new Date()
   const reversionDate = borrowDate.getTime() + durations[formData.duration - 1]
   const params1 = {
+    bookId: bookData.value.bookId,
+    bookName: bookData.value.name,
     userId: userStore.user.userId,
     userName: userStore.user.name,
     borrowDate: borrowDate.getTime(),
     reversionDate: reversionDate
   }
+  console.log(bookData.value)
+  console.log(params1)
   const res1 = await insertBorrowLog(params1)
   if (res1.data.code === 200) {
     // 提交修改图书状态  1
